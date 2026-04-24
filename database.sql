@@ -490,3 +490,34 @@ BEGIN
     WHERE i.Status = 'Paid';
 END;
 GO
+
+CREATE OR ALTER VIEW vw_TableStatus
+AS
+    SELECT
+        t.TableID,
+        t.TableName                 AS TenBan,
+        t.Capacity                  AS SucChua,
+        t.Status                    AS TrangThai,
+        i.InvoiceID,
+        i.TotalAmount               AS TongTienHienTai,
+        i.CreatedAt                 AS ThoiGianMoBan
+    FROM [Table] t
+    LEFT JOIN Invoice i ON t.TableID = i.TableID
+        AND i.Status = 'Unpaid';
+GO
+
+CREATE OR ALTER VIEW vw_BestSellingItems
+AS
+    SELECT
+        mi.ItemID,
+        mi.ItemName                         AS TenMon,
+        c.CategoryName                      AS DanhMuc,
+        SUM(id.Quantity)                    AS TongSoLuong,
+        SUM(id.Quantity * id.UnitPrice)     AS DoanhThu
+    FROM InvoiceDetail id
+    JOIN MenuItem mi    ON id.MenuItemID    = mi.ItemID
+    JOIN Category c     ON mi.CategoryID   = c.CategoryID
+    JOIN Invoice i      ON id.InvoiceID    = i.InvoiceID
+    WHERE i.Status = 'Paid'
+    GROUP BY mi.ItemID, mi.ItemName, c.CategoryName;
+GO
