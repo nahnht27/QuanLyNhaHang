@@ -108,15 +108,15 @@ CREATE TABLE Invoice (
 GO
 
 CREATE TABLE InvoiceDetail (
-    InvoiceDetailID INT           IDENTITY(1,1) PRIMARY KEY,
-    Quantity        INT           NOT NULL CHECK (Quantity > 0),
-    UnitPrice       DECIMAL(10,2) NOT NULL CHECK (UnitPrice >= 0),
-    InvoiceID       INT           NOT NULL,
-    MenuItemID      INT           NOT NULL,
+    InvoiceDetailID INT            IDENTITY(1,1) PRIMARY KEY,
+    Quantity        INT            NOT NULL CHECK (Quantity > 0),
+    UnitPrice       DECIMAL(10,2)  NOT NULL CHECK (UnitPrice >= 0),
+    InvoiceID       INT            NOT NULL,
+    ItemID          INT            NOT NULL, 
     CONSTRAINT FK_InvoiceDetail_Invoice  FOREIGN KEY (InvoiceID)
         REFERENCES Invoice(InvoiceID),
-    CONSTRAINT FK_InvoiceDetail_MenuItem FOREIGN KEY (MenuItemID)
-        REFERENCES MenuItem(ItemID)
+    CONSTRAINT FK_InvoiceDetail_MenuItem FOREIGN KEY (ItemID)
+        REFERENCES MenuItem(ItemID)            
 );
 GO
 
