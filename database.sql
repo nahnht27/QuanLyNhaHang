@@ -1,8 +1,7 @@
-CREATE DATABASE QuanLyNhaHang;
-GO
 
 USE QuanLyNhaHang;
 GO
+drop table if exists InvoiceDetail, Invoice, Reservation, Account, Staff, Customer, [Table], MenuItem, Category;
 
 CREATE TABLE Category (
     CategoryID   INT           IDENTITY(1,1) PRIMARY KEY,
@@ -213,7 +212,7 @@ INSERT INTO Invoice (TotalAmount, Status, PaymentMethod, TableID, StaffID) VALUE
 (610000,  'Paid',   'Transfer', 5, 3);   -- Đã thanh toán chuyển khoản
 GO
 
-INSERT INTO InvoiceDetail (Quantity, UnitPrice, InvoiceID, MenuItemID) VALUES
+INSERT INTO InvoiceDetail (Quantity, UnitPrice, InvoiceID, ItemID) VALUES
 
 (2, 45000,  1, 1),
 (1, 350000, 1, 6),
@@ -291,7 +290,7 @@ BEGIN
             DECLARE @UnitPrice DECIMAL(10,2);
             SELECT @UnitPrice = Price FROM MenuItem WHERE ItemID = @MenuItemID;
 
-            INSERT INTO InvoiceDetail (Quantity, UnitPrice, InvoiceID, MenuItemID)
+            INSERT INTO InvoiceDetail (Quantity, UnitPrice, InvoiceID, ItemID)
             VALUES (@Quantity, @UnitPrice, @InvoiceID, @MenuItemID);
 
         COMMIT TRANSACTION AddInvoiceDetail;
@@ -425,7 +424,7 @@ BEGIN
                 SUM(id.Quantity)                AS TongSoLuong,
                 SUM(id.Quantity * id.UnitPrice) AS DoanhThu
             FROM InvoiceDetail id
-            JOIN MenuItem mi ON id.MenuItemID = mi.ItemID
+            JOIN MenuItem mi ON id.ItemID = mi.ItemID
             JOIN Invoice i   ON id.InvoiceID  = i.InvoiceID
             WHERE i.Status = 'Paid'
             GROUP BY mi.ItemName
@@ -515,7 +514,7 @@ AS
         SUM(id.Quantity)                    AS TongSoLuong,
         SUM(id.Quantity * id.UnitPrice)     AS DoanhThu
     FROM InvoiceDetail id
-    JOIN MenuItem mi    ON id.MenuItemID    = mi.ItemID
+    JOIN MenuItem mi    ON id.ItemID    = mi.ItemID
     JOIN Category c     ON mi.CategoryID   = c.CategoryID
     JOIN Invoice i      ON id.InvoiceID    = i.InvoiceID
     WHERE i.Status = 'Paid'
