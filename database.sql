@@ -269,7 +269,7 @@ GO
 
 CREATE OR ALTER PROCEDURE sp_AddInvoiceDetail
     @InvoiceID  INT,
-    @MenuItemID INT,
+    @ItemID INT,
     @Quantity   INT
 AS
 BEGIN
@@ -281,17 +281,17 @@ BEGIN
             IF NOT EXISTS (SELECT 1 FROM Invoice WHERE InvoiceID = @InvoiceID AND Status = 'Unpaid')
                 THROW 50004, N'Hóa đơn không tồn tại hoặc đã thanh toán!', 1;
 
-            IF NOT EXISTS (SELECT 1 FROM MenuItem WHERE ItemID = @MenuItemID AND Status = 'Available')
+            IF NOT EXISTS (SELECT 1 FROM MenuItem WHERE ItemID = @ItemID AND Status = 'Available')
                 THROW 50005, N'Món ăn không tồn tại hoặc đã hết!', 1;
 
             IF @Quantity <= 0
                 THROW 50006, N'Số lượng phải lớn hơn 0!', 1;
 
             DECLARE @UnitPrice DECIMAL(10,2);
-            SELECT @UnitPrice = Price FROM MenuItem WHERE ItemID = @MenuItemID;
+            SELECT @UnitPrice = Price FROM MenuItem WHERE ItemID = @ItemID;
 
             INSERT INTO InvoiceDetail (Quantity, UnitPrice, InvoiceID, ItemID)
-            VALUES (@Quantity, @UnitPrice, @InvoiceID, @MenuItemID);
+            VALUES (@Quantity, @UnitPrice, @InvoiceID, @ItemID);
 
         COMMIT TRANSACTION AddInvoiceDetail;
     END TRY
