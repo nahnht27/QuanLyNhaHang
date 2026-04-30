@@ -514,9 +514,102 @@ AS
         SUM(id.Quantity)                    AS TongSoLuong,
         SUM(id.Quantity * id.UnitPrice)     AS DoanhThu
     FROM InvoiceDetail id
-    JOIN MenuItem mi    ON id.ItemID    = mi.ItemID
+    JOIN MenuItem mi    ON id.ItemID       = mi.ItemID
     JOIN Category c     ON mi.CategoryID   = c.CategoryID
     JOIN Invoice i      ON id.InvoiceID    = i.InvoiceID
     WHERE i.Status = 'Paid'
     GROUP BY mi.ItemID, mi.ItemName, c.CategoryName;
 GO
+
+-- Cập nhật lại TotalAmount cho tất cả hóa đơn
+UPDATE Invoice
+SET TotalAmount = (
+    SELECT COALESCE(SUM(Quantity * UnitPrice), 0)
+    FROM InvoiceDetail
+    WHERE InvoiceID = Invoice.InvoiceID
+);
+
+--Demo thanh toán hóa đơn 
+SELECT i.InvoiceID, i.Status AS InvoiceStatus,
+       i.TotalAmount, t.TableName, t.Status AS TableStatus
+FROM Invoice i
+JOIN [Table] t ON i.TableID = t.TableID
+WHERE i.InvoiceID = 1; 
+
+--truy vấn trạng thái bàn
+SELECT * FROM vw_TableStatus
+ORDER BY TableID;
+
+SELECT 
+    InvoiceID, 
+    Status, 
+    TotalAmount
+FROM Invoice 
+WHERE InvoiceID = 1;
+
+SELECT 
+    TableID, 
+    TableName, 
+    Status 
+FROM [Table] 
+WHERE TableID = 4;
+
+EXEC sp_PayInvoice 
+    @InvoiceID = 1, 
+    @PaymentMethod = 'Cash';
+
+SELECT 
+    InvoiceID, 
+    Status, 
+    TotalAmount
+FROM Invoice 
+WHERE InvoiceID = 1;
+
+SELECT 
+    TableID, 
+    TableName, 
+    Status
+FROM [Table] 
+WHERE TableID = 4;
+
+
+SELECT InvoiceID, Status 
+FROM Invoice 
+WHERE InvoiceID = 2;
+
+SELECT TableID, Status 
+FROM [Table]
+WHERE TableID = 8;
+
+BEGIN TRANSACTION;
+UPDATE Invoice
+SET Status = 'Paid',
+    PaymentMethod = 'Cash'
+WHERE InvoiceID = 2;
+
+SELECT InvoiceID, Status
+FROM Invoice
+WHERE InvoiceID = 2;
+
+SELECT TableID, Status
+FROM [Table]
+WHERE TableID = 8;
+
+ROLLBACK TRANSACTION;
+
+SELECT InvoiceID, Status
+FROM Invoice
+WHERE InvoiceID = 2;
+
+SELECT TableID, Status
+FROM [Table]
+WHERE TableID = 8;
+
+EXEC sp_PayInvoice 
+    @InvoiceID = 99, 
+    @PaymentMethod = 'Cash';
+
+EXEC sp_PayInvoice 
+    @InvoiceID = 2, 
+    @PaymentMethod = 'Paypal';
+
