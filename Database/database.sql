@@ -529,11 +529,13 @@ SET TotalAmount = (
     WHERE InvoiceID = Invoice.InvoiceID
 );
 
+
 SELECT i.InvoiceID, i.Status AS InvoiceStatus,
        i.TotalAmount, t.TableName, t.Status AS TableStatus
 FROM Invoice i
 JOIN [Table] t ON i.TableID = t.TableID
 WHERE i.InvoiceID = 1; 
+
 
 SELECT * FROM vw_TableStatus
 ORDER BY TableID;
@@ -610,3 +612,4 @@ EXEC sp_PayInvoice
 EXEC sp_PayInvoice 
     @InvoiceID = 2, 
     @PaymentMethod = 'Paypal';
+
