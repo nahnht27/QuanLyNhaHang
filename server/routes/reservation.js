@@ -2,7 +2,7 @@ const express = require('express');
 const router  = express.Router();
 const { sql, getPool } = require('../config/db');
 
-// GET /api/reservation/tables – bàn trống để khách chọn khi đặt
+// GET /api/reservation/tables – bàn trống để khách chọn 
 router.get('/tables', async (req, res) => {
     try {
         const pool = await getPool();
