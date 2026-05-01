@@ -1,6 +1,6 @@
 #  QuanLyNhaHang — Happy Dinner
 
-Hệ thống quản lý nhà hàng Việt sử dụng SQL Server + Node.js + Express, xây dựng cho môn **Hệ Quản Trị Cơ Sở Dữ Liệu**.
+Hệ thống quản lý nhà hàng sử dụng SQL Server + Node.js + Express, xây dựng cho môn **Hệ Quản Trị Cơ Sở Dữ Liệu**.
 
 ---
 
@@ -108,20 +108,7 @@ Database/Security.sql
 
 ---
 
-### 3. Configure database connection
-
-Open `server/config/db.js` and update your SQL Server credentials:
-
-```js
-server: 'YOUR_SERVER_NAME',
-user: 'YOUR_USERNAME',
-password: 'YOUR_PASSWORD',
-database: 'QuanLyNhaHang'
-```
-
----
-
-### 4. Install dependencies and run server
+### 3. Install dependencies and run server
 
 ```bash
 cd server
@@ -131,7 +118,7 @@ npm start
 
 ---
 
-### 5. Open in browser
+### 4. Open in browser
 
 ```
 http://localhost:3000
@@ -158,7 +145,7 @@ http://localhost:3000
 
 ---
 
-## 🔌 API Endpoints
+##  API Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
