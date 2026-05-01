@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thực Đơn – Happy Dinner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-hd">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Happy <span>Dinner</span></a>
+    <div class="d-flex gap-3">
+      <a href="index.html"       class="nav-link">Trang chủ</a>
+      <a href="menu.html"        class="nav-link" style="color:#C8973A !important; font-weight:600;">Thực đơn</a>
+      <a href="reservation.html" class="nav-link">Đặt bàn</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#3D1F0A,#6B3A1F); padding:2.5rem 0; text-align:center;">
+  <h2 style="color:#fff; font-weight:700; margin:0;">Thực Đơn</h2>
+  <div style="width:50px;height:2px;background:#C8973A;margin:.75rem auto;border-radius:2px;"></div>
+  <p style="color:rgba(255,255,255,.7); margin:0;">Hương vị đậm đà từ các vùng miền Việt Nam</p>
+</div>
+
+<!-- FILTER TABS -->
+<div class="container mt-4">
+  <div id="categoryTabs" class="d-flex gap-2 flex-wrap mb-4">
+    <button class="btn btn-hd-primary active-tab" data-cat="all" onclick="filterCat(this,'all')">Tất cả</button>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loadingMsg" class="text-center py-5" style="color:#7A5C3E;">
+    <div class="spinner-border" style="color:#6B3A1F;" role="status"></div>
+    <p class="mt-2">Đang tải thực đơn…</p>
+  </div>
+
+  <!-- MENU GRID -->
+  <div id="menuGrid" class="row g-3" style="display:none;"></div>
+</div>
+
+<footer style="background:#3D1F0A;color:rgba(255,255,255,.55);text-align:center;padding:1.1rem;font-size:.82rem;margin-top:3rem;">
+  © 2026 Happy Dinner &nbsp;|&nbsp; Đồ án môn Cơ Sở Dữ Liệu
+</footer>
+
+<a href="login.html" style="
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  background:#3D1F0A;color:rgba(255,255,255,.65);
+  border:1px solid rgba(200,151,58,.4);border-radius:50px;
+  padding:.45rem 1rem;font-size:.73rem;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  display:flex;align-items:center;gap:.4rem;text-decoration:none;
+  box-shadow:0 4px 12px rgba(61,31,10,.5);"
+  onmouseover="this.style.color='#fff';this.style.borderColor='#C8973A';"
+  onmouseout="this.style.color='rgba(255,255,255,.65)';this.style.borderColor='rgba(200,151,58,.4)';">
+  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+  </svg>
+  Đăng nhập nhân viên
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Nếu mở qua Live Server (port 5500) thì tự động trỏ sang Node.js (port 3000)
+const API = window.location.port === '5500' ? 'http://localhost:3000' : '';
+
+let allItems = [];
+
+async function loadMenu() {
+  try {
+    const res  = await fetch(API + '/api/menu');
+    const data = await res.json();
+    allItems   = data;
+
+    // Build category tabs
+    const cats = [...new Set(data.map(i => i.DanhMuc))];
+    const tabs = document.getElementById('categoryTabs');
+    cats.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-hd-outline';
+      btn.dataset.cat = cat;
+      btn.textContent = cat;
+      btn.onclick = () => filterCat(btn, cat);
+      tabs.appendChild(btn);
+    });
+
+    renderItems(data);
+    document.getElementById('loadingMsg').style.display = 'none';
+    document.getElementById('menuGrid').style.display   = '';
+  } catch (e) {
+    document.getElementById('loadingMsg').innerHTML =
+      '<p style="color:#dc3545;">Không thể tải thực đơn. Vui lòng thử lại.</p>';
+  }
+}
+
+function filterCat(btn, cat) {
+  document.querySelectorAll('#categoryTabs button').forEach(b => {
+    b.classList.remove('btn-hd-primary','active-tab');
+    b.classList.add('btn-hd-outline');
+  });
+  btn.classList.remove('btn-hd-outline');
+  btn.classList.add('btn-hd-primary','active-tab');
+
+  const filtered = cat === 'all' ? allItems : allItems.filter(i => i.DanhMuc === cat);
+  renderItems(filtered);
+}
+
+function renderItems(items) {
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = '';
+  if (!items.length) {
+    grid.innerHTML = '<p class="text-center" style="color:#7A5C3E;">Không có món nào.</p>';
+    return;
+  }
+  items.forEach(item => {
+    const available = item.TrangThai === 'Available';
+    grid.innerHTML += `
+      <div class="col-sm-6 col-lg-4">
+        <div class="card-hd h-100 p-3 d-flex flex-column" style="opacity:${available ? 1 : 0.6};">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="fw-bold mb-0" style="color:#3D1F0A;">${item.TenMon}</h6>
+            <span class="badge rounded-pill ms-2 ${available ? 'badge-available' : 'badge-unavailable'}" style="font-size:.7rem;">
+              ${available ? 'Còn món' : 'Hết món'}
+            </span>
+          </div>
+          <p style="font-size:.85rem;color:#7A5C3E;flex:1;">${item.MoTa || '–'}</p>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <span style="font-size:.75rem;background:#FDF6EC;color:#7A5C3E;padding:.15rem .5rem;border-radius:3px;">${item.DanhMuc}</span>
+            <span class="fw-bold" style="color:#6B3A1F;font-size:1rem;">${Number(item.Gia).toLocaleString('vi-VN')}₫</span>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+loadMenu();
+</script>
+</body>
+</html>

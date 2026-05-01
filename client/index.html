@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Dinner – Nhà Hàng Việt</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ========== HERO SECTION ========== -->
+<section style="
+  background: linear-gradient(135deg, #3D1F0A 0%, #6B3A1F 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+">
+  <div>
+    <!-- Logo circle -->
+    <div style="
+      width:80px; height:80px;
+      background:#C8973A;
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.8rem; font-weight:700;
+      color:#3D1F0A;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 4px 20px rgba(200,151,58,0.4);
+    ">HD</div>
+
+    <!-- Title -->
+    <h1 style="color:#fff; font-size:clamp(2.2rem,6vw,3.5rem); font-weight:700; margin-bottom:0;">
+      Happy <span style="color:#C8973A;">Dinner</span>
+    </h1>
+
+    <!-- Gold divider -->
+    <div style="width:60px;height:2px;background:#C8973A;margin:1rem auto;border-radius:2px;"></div>
+
+    <!-- Subtitle -->
+    <p style="color:rgba(255,255,255,0.75); font-size:1.05rem; margin-bottom:2rem;">
+      Hương vị đậm đà – Dịch vụ tận tâm – Không gian ấm cúng
+    </p>
+
+    <!-- 2 Public Action Buttons -->
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="reservation.html" class="btn btn-lg px-4 fw-semibold" style="background:#C8973A; color:#3D1F0A; border:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="me-2 mb-1" viewBox="0 0 16 16">
+          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+        </svg>
+        Đặt Bàn
+      </a>
+      <a href="menu.html" class="btn btn-lg px-4 fw-semibold" style="border:2px solid #fff; color:#fff; background:transparent;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="me-2 mb-1" viewBox="0 0 16 16">
+          <path d="M2 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+        </svg>
+        Xem Thực Đơn
+      </a>
+    </div>
+
+    <div class="mt-5" style="color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.1em;">
+      ↓ &nbsp;Tìm hiểu thêm
+    </div>
+  </div>
+</section>
+
+<!-- ========== ABOUT SECTION ========== -->
+<section style="background:#fff; padding:4rem 0;">
+  <div class="container" style="max-width:860px;">
+
+    <div class="text-center mb-4">
+      <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:#C8973A; display:block; margin-bottom:0.4rem;">
+        Về Chúng Tôi
+      </span>
+      <h2 class="fw-bold" style="color:#3D1F0A;">Happy Dinner là gì?</h2>
+      <hr style="width:50px; border-color:#C8973A; border-width:2px; margin:0.75rem auto;" />
+    </div>
+
+    <div class="row g-4 align-items-start">
+      <div class="col-md-6">
+        <p style="color:#7A5C3E; font-size:1rem; line-height:1.8;">
+          <strong style="color:#3D1F0A;">Happy Dinner</strong> là nhà hàng Việt mang đến
+          trải nghiệm ẩm thực chân thực với hương vị đậm đà từ các vùng miền.
+          Thành lập với sứ mệnh mang bữa cơm gia đình ấm áp đến với mọi thực khách.
+        </p>
+        <p style="color:#7A5C3E; font-size:1rem; line-height:1.8;" class="mt-3">
+          Hệ thống quản lý được xây dựng trên nền tảng <strong>SQL Server</strong> với
+          các cơ chế <strong>Transaction, Stored Procedure</strong> và <strong>phân quyền</strong>
+          đảm bảo dữ liệu luôn chính xác và nhất quán.
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <div style="padding:1rem 1.25rem; border-left:3px solid #C8973A; background:#FDF6EC; border-radius:0 6px 6px 0; margin-bottom:0.75rem;">
+          <h6 class="fw-bold mb-1" style="color:#3D1F0A;">🍜 Thực Đơn Phong Phú</h6>
+          <p class="mb-0" style="font-size:0.9rem; color:#7A5C3E;">Đa dạng từ khai vị, món chính, tráng miệng đến đồ uống.</p>
+        </div>
+        <div style="padding:1rem 1.25rem; border-left:3px solid #C8973A; background:#FDF6EC; border-radius:0 6px 6px 0; margin-bottom:0.75rem;">
+          <h6 class="fw-bold mb-1" style="color:#3D1F0A;">👥 Phục Vụ Tận Tâm</h6>
+          <p class="mb-0" style="font-size:0.9rem; color:#7A5C3E;">Nhân viên phân quyền rõ ràng, phục vụ nhanh và chuyên nghiệp.</p>
+        </div>
+        <div style="padding:1rem 1.25rem; border-left:3px solid #C8973A; background:#FDF6EC; border-radius:0 6px 6px 0;">
+          <h6 class="fw-bold mb-1" style="color:#3D1F0A;">📊 Quản Lý Minh Bạch</h6>
+          <p class="mb-0" style="font-size:0.9rem; color:#7A5C3E;">Hóa đơn, doanh thu và đặt bàn theo dõi realtime, toàn vẹn dữ liệu.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="row g-3 mt-3 text-center">
+      <div class="col-4">
+        <div class="p-3 rounded" style="background:#FDF6EC; border:1px solid #EAD9B8;">
+          <div class="fw-bold fs-3" style="color:#6B3A1F;">10</div>
+          <div style="font-size:0.8rem; color:#7A5C3E;">Bàn ăn</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="p-3 rounded" style="background:#FDF6EC; border:1px solid #EAD9B8;">
+          <div class="fw-bold fs-3" style="color:#6B3A1F;">13</div>
+          <div style="font-size:0.8rem; color:#7A5C3E;">Món ăn</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="p-3 rounded" style="background:#FDF6EC; border:1px solid #EAD9B8;">
+          <div class="fw-bold fs-3" style="color:#6B3A1F;">6</div>
+          <div style="font-size:0.8rem; color:#7A5C3E;">Nhân viên</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer style="background:#3D1F0A; color:rgba(255,255,255,0.55); text-align:center; padding:1.1rem; font-size:0.82rem;">
+  © 2026 Happy Dinner &nbsp;|&nbsp; Đồ án môn Cơ Sở Dữ Liệu
+</footer>
+
+<!-- ========== FLOATING STAFF LOGIN ========== -->
+<a href="login.html" title="Đăng nhập dành cho nhân viên" style="
+  position:fixed; bottom:1.5rem; right:1.5rem; z-index:999;
+  background:#3D1F0A; color:rgba(255,255,255,0.65);
+  border:1px solid rgba(200,151,58,0.4);
+  border-radius:50px; padding:0.45rem 1rem;
+  font-size:0.73rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase;
+  display:flex; align-items:center; gap:0.4rem;
+  text-decoration:none;
+  box-shadow: 0 4px 12px rgba(61,31,10,0.5);
+  transition: all 0.25s;
+" onmouseover="this.style.color='#fff'; this.style.borderColor='#C8973A';"
+   onmouseout="this.style.color='rgba(255,255,255,0.65)'; this.style.borderColor='rgba(200,151,58,0.4)';">
+  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.029 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+  </svg>
+  Đăng nhập nhân viên
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

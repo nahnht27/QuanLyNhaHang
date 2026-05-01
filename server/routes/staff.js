@@ -5,7 +5,7 @@ const { sql, getPool } = require('../config/db');
 // GET /api/staff – Danh sách nhân viên
 router.get('/', async (req, res) => {
     try {
-        const pool = await poolPromise;
+        const pool = await getPool();
         const result = await pool.request()
             .query('SELECT StaffID, FullName, Position, Phone FROM Staff');
         res.json(result.recordset);

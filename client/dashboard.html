@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – Happy Dinner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast" class="toast-hd"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    Happy <span>Dinner</span>
+    <div id="roleBadge" class="sidebar-role-badge">–</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-item">
+      <a href="#" class="nav-link active" onclick="showPanel('overview',this)">
+        <svg fill="currentColor" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4M3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L9.45 7.517c-.139.109-.36.09-.49-.04a.73.73 0 0 0-1.063 0 .784.784 0 0 0 0 1.093.73.73 0 0 0 1.063 0 .39.39 0 0 0 .08-.526l1.83-1.83a.389.389 0 0 0-.017-.533z"/><path d="M6.5 14.517A7 7 0 1 0 1.518 9.5H.5a.5.5 0 0 0 0 1h1.02a7 7 0 0 0 4.98 4Z"/></svg>
+        Tổng quan
+      </a>
+    </div>
+    <div class="nav-item" id="nav-tables">
+      <a href="#" class="nav-link" onclick="showPanel('tables',this)">
+        <svg fill="currentColor" viewBox="0 0 16 16"><path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/></svg>
+        Quản lý bàn
+      </a>
+    </div>
+    <div class="nav-item" id="nav-invoice">
+      <a href="#" class="nav-link" onclick="showPanel('invoice',this)">
+        <svg fill="currentColor" viewBox="0 0 16 16"><path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/><path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3z"/></svg>
+        Tạo hóa đơn
+      </a>
+    </div>
+    <div class="nav-item" id="nav-revenue">
+      <a href="#" class="nav-link" onclick="showPanel('revenue',this)">
+        <svg fill="currentColor" viewBox="0 0 16 16"><path d="M0 0h1v15h15v1H0V0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07z"/></svg>
+        Doanh thu
+      </a>
+    </div>
+    <div class="nav-item" id="nav-reservation">
+      <a href="#" class="nav-link" onclick="showPanel('reservation',this)">
+        <svg fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></svg>
+        Đặt bàn
+      </a>
+    </div>
+    <div class="nav-item" id="nav-menu">
+      <a href="#" class="nav-link" onclick="showPanel('menu',this)">
+        <svg fill="currentColor" viewBox="0 0 16 16"><path d="M2 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/></svg>
+        Thực đơn
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="logout()">
+      <svg fill="currentColor" width="14" height="14" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/><path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/></svg>
+      Đăng xuất
+    </button>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="dashboard-wrapper">
+  <div class="dashboard-topbar">
+    <h5 id="topbarTitle">Tổng quan</h5>
+    <span id="topbarUser" style="font-size:.85rem;color:#7A5C3E;"></span>
+  </div>
+
+  <div class="dashboard-content">
+
+    <!-- ===== OVERVIEW ===== -->
+    <div id="panel-overview" class="content-panel active">
+      <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card">
+            <div class="stat-icon"><svg fill="currentColor" viewBox="0 0 16 16"><path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/></svg></div>
+            <div><div class="stat-value" id="statTotalTables">–</div><div class="stat-label">Tổng số bàn</div></div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card">
+            <div class="stat-icon"><svg fill="currentColor" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/></svg></div>
+            <div><div class="stat-value" id="statEmptyTables">–</div><div class="stat-label">Bàn trống</div></div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card">
+            <div class="stat-icon"><svg fill="currentColor" viewBox="0 0 16 16"><path d="M2 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/></svg></div>
+            <div><div class="stat-value" id="statMenuCount">–</div><div class="stat-label">Món trong thực đơn</div></div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card">
+            <div class="stat-icon" style="color:#C8973A;background:#FFF3DC;"><svg fill="currentColor" viewBox="0 0 16 16"><path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.9c-.178-1.715-1.509-2.9-3.97-3.016V1H7.591v1.067c-2.052.166-3.454 1.327-3.454 3.062 0 1.455.947 2.453 2.edit.28l.65.187v4.828c-1.144-.153-1.95-.832-2.073-1.843H4zm1.868-2.35c0-.67.47-1.18 1.368-1.37v2.8l-.325-.077c-.884-.22-1.043-.7-1.043-1.353zm3.492 3.381c1.077.214 1.547.751 1.547 1.41 0 .74-.57 1.302-1.547 1.446V11.812z"/></svg></div>
+            <div><div class="stat-value" id="statTodayRevenue">–</div><div class="stat-label">Doanh thu hôm nay</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Best selling -->
+      <div class="card-hd">
+        <div class="card-header">🏆 Top 5 Món Bán Chạy</div>
+        <div class="p-3">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>#</th><th>Tên món</th><th>Số lượng</th><th>Doanh thu</th></tr></thead>
+            <tbody id="bestSellingBody"><tr><td colspan="4" class="text-center py-3" style="color:#7A5C3E;">Đang tải…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TABLES ===== -->
+    <div id="panel-tables" class="content-panel">
+      <div class="page-title">Quản lý bàn</div>
+      <div id="tableGrid" class="row g-3"></div>
+    </div>
+
+    <!-- ===== INVOICE ===== -->
+    <div id="panel-invoice" class="content-panel">
+      <div class="page-title">Tạo & quản lý hóa đơn</div>
+      <div class="row g-3">
+        <!-- Tạo hóa đơn -->
+        <div class="col-md-5">
+          <div class="card-hd">
+            <div class="card-header">Tạo hóa đơn mới <span class="sp-call-badge">sp_AddInvoice</span></div>
+            <div class="p-3">
+              <label class="form-label">Chọn bàn</label>
+              <select id="invTableSelect" class="form-select mb-3"></select>
+              <label class="form-label">Nhân viên phụ trách</label>
+              <select id="invStaffSelect" class="form-select mb-3"></select>
+              <button class="btn btn-hd-primary w-100" onclick="createInvoice()">Tạo hóa đơn</button>
+            </div>
+          </div>
+        </div>
+        <!-- Thêm món -->
+        <div class="col-md-7">
+          <div class="card-hd">
+            <div class="card-header">Thêm món vào hóa đơn <span class="sp-call-badge">sp_AddInvoiceDetail</span></div>
+            <div class="p-3">
+              <div class="row g-2 mb-3">
+                <div class="col-5">
+                  <label class="form-label">Mã hóa đơn</label>
+                  <input id="detailInvID" type="number" class="form-control" placeholder="ID" />
+                </div>
+                <div class="col-4">
+                  <label class="form-label">Số lượng</label>
+                  <input id="detailQty" type="number" class="form-control" placeholder="1" min="1" value="1" />
+                </div>
+                <div class="col-3 d-flex align-items-end">
+                  <button class="btn btn-hd-gold w-100" onclick="addDetail()">Thêm</button>
+                </div>
+              </div>
+              <label class="form-label">Chọn món</label>
+              <select id="detailMenuSelect" class="form-select"></select>
+            </div>
+          </div>
+
+          <div class="card-hd mt-3">
+            <div class="card-header">Thanh toán <span class="sp-call-badge">sp_PayInvoice</span></div>
+            <div class="p-3">
+              <div class="row g-2">
+                <div class="col-5">
+                  <label class="form-label">Mã hóa đơn</label>
+                  <input id="payInvID" type="number" class="form-control" placeholder="ID" />
+                </div>
+                <div class="col-4">
+                  <label class="form-label">Phương thức</label>
+                  <select id="payMethod" class="form-select">
+                    <option value="Cash">Tiền mặt</option>
+                    <option value="Transfer">Chuyển khoản</option>
+                  </select>
+                </div>
+                <div class="col-3 d-flex align-items-end">
+                  <button class="btn btn-hd-primary w-100" onclick="payInvoice()">Thanh toán</button>
+                </div>
+              </div>
+              <div id="payResult" class="mt-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REVENUE ===== -->
+    <div id="panel-revenue" class="content-panel">
+      <div class="page-title">Thống kê doanh thu</div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="card-hd">
+            <div class="card-header">Theo ngày <span class="sp-call-badge">sp_GetRevenueByDate</span></div>
+            <div class="p-3 d-flex gap-2">
+              <input id="revDate" type="date" class="form-control" />
+              <button class="btn btn-hd-primary px-3" onclick="getRevenueByDate()">Xem</button>
+            </div>
+            <div id="revDateResult" class="px-3 pb-3"></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-hd">
+            <div class="card-header">Theo tháng <span class="sp-call-badge">sp_GetRevenueByMonth</span></div>
+            <div class="p-3 d-flex gap-2">
+              <input id="revMonth" type="number" class="form-control" placeholder="Tháng" min="1" max="12" />
+              <input id="revYear"  type="number" class="form-control" placeholder="Năm" />
+              <button class="btn btn-hd-primary px-3" onclick="getRevenueByMonth()">Xem</button>
+            </div>
+            <div id="revMonthResult" class="px-3 pb-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RESERVATION ===== -->
+    <div id="panel-reservation" class="content-panel">
+      <div class="page-title">Quản lý đặt bàn</div>
+      <div class="card-hd">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          Danh sách đặt bàn
+          <button class="btn btn-hd-gold btn-sm" onclick="loadReservations()">Làm mới</button>
+        </div>
+        <div class="p-3">
+          <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>Khách hàng</th><th>SĐT</th><th>Bàn</th><th>Ngày đến</th><th>Khách</th><th>Trạng thái</th><th></th></tr></thead>
+            <tbody id="reservationBody"><tr><td colspan="8" class="text-center py-3" style="color:#7A5C3E;">Đang tải…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MENU ===== -->
+    <div id="panel-menu" class="content-panel">
+      <div class="page-title">Thực đơn</div>
+      <div id="dashMenuGrid" class="row g-3"></div>
+    </div>
+
+  </div><!-- /dashboard-content -->
+</div><!-- /dashboard-wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ===== AUTH ===== */
+const user = JSON.parse(sessionStorage.getItem('hd_user') || 'null');
+if (!user) window.location.href = 'login.html';
+
+document.getElementById('roleBadge').textContent = user?.role || '–';
+document.getElementById('topbarUser').textContent  = user?.name || '';
+
+// Hide panels based on role
+const roleNav = {
+  Manager: ['nav-tables','nav-invoice','nav-revenue','nav-reservation','nav-menu'],
+  Cashier: ['nav-invoice','nav-revenue','nav-reservation'],
+  Waiter:  ['nav-tables','nav-invoice']
+};
+document.querySelectorAll('.sidebar-nav .nav-item[id]').forEach(el => {
+  if (!roleNav[user?.role]?.includes(el.id)) el.style.display = 'none';
+});
+
+function logout() {
+  sessionStorage.removeItem('hd_user');
+  window.location.href = 'login.html';
+}
+
+/* ===== TOAST ===== */
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = `toast-hd ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ===== PANEL SWITCH ===== */
+const panelTitles = {
+  overview:'Tổng quan', tables:'Quản lý bàn', invoice:'Tạo hóa đơn',
+  revenue:'Doanh thu', reservation:'Đặt bàn', menu:'Thực đơn'
+};
+function showPanel(name, el) {
+  document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav .nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('topbarTitle').textContent = panelTitles[name] || name;
+  if (name === 'tables')      loadTables();
+  if (name === 'invoice')     loadInvoiceSelects();
+  if (name === 'reservation') loadReservations();
+  if (name === 'menu')        loadDashMenu();
+}
+
+/* ===== API HELPERS ===== */
+const API = window.location.port === '5500' ? 'http://localhost:3000' : '';
+
+async function apiFetch(url, opts={}) {
+  const res  = await fetch(API + url, opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Lỗi server');
+  return data;
+}
+
+/* ===== OVERVIEW ===== */
+async function loadOverview() {
+  try {
+    const [tables, menu, revenue, best] = await Promise.all([
+      apiFetch('/api/table'),
+      apiFetch('/api/menu'),
+      apiFetch('/api/invoice/revenue/date/' + new Date().toISOString().slice(0,10)),
+      apiFetch('/api/invoice/bestselling')
+    ]);
+    document.getElementById('statTotalTables').textContent  = tables.length;
+    document.getElementById('statEmptyTables').textContent  = tables.filter(t=>t.Status==='Empty').length;
+    document.getElementById('statMenuCount').textContent    = menu.filter(m=>m.TrangThai==='Available').length;
+    const todayRev = revenue[0]?.DoanhThu || 0;
+    document.getElementById('statTodayRevenue').textContent = Number(todayRev).toLocaleString('vi-VN')+'₫';
+
+    const tbody = document.getElementById('bestSellingBody');
+    tbody.innerHTML = '';
+    if (!best.length) { tbody.innerHTML = '<tr><td colspan="4" class="text-center" style="color:#7A5C3E;">Chưa có dữ liệu</td></tr>'; return; }
+    best.forEach((b,i) => {
+      tbody.innerHTML += `<tr>
+        <td>${i+1}</td>
+        <td>${b.ItemName}</td>
+        <td>${b.TongSoLuong}</td>
+        <td>${Number(b.DoanhThu).toLocaleString('vi-VN')}₫</td>
+      </tr>`;
+    });
+  } catch(e) { console.error(e); }
+}
+
+/* ===== TABLES ===== */
+async function loadTables() {
+  try {
+    const tables = await apiFetch('/api/table');
+    const grid   = document.getElementById('tableGrid');
+    grid.innerHTML = '';
+    tables.forEach(t => {
+      const statusClass = { Empty:'badge-empty', Occupied:'badge-occupied', Reserved:'badge-reserved' }[t.Status] || '';
+      const statusLabel = { Empty:'Trống', Occupied:'Có khách', Reserved:'Đã đặt' }[t.Status] || t.Status;
+      grid.innerHTML += `
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="card-hd p-3 text-center">
+            <h5 class="fw-bold mb-1" style="color:#3D1F0A;">${t.TableName}</h5>
+            <p style="font-size:.82rem;color:#7A5C3E;margin:.2rem 0;">Sức chứa: ${t.Capacity} khách</p>
+            <span class="badge rounded-pill ${statusClass}" style="font-size:.8rem;">${statusLabel}</span>
+          </div>
+        </div>`;
+    });
+  } catch(e) { showToast('Lỗi tải bàn: '+e.message,'error'); }
+}
+
+/* ===== INVOICE ===== */
+async function loadInvoiceSelects() {
+  try {
+    const [tables, menu, staff] = await Promise.all([
+      apiFetch('/api/table/empty'),
+      apiFetch('/api/menu/available'),
+      apiFetch('/api/staff')
+    ]);
+
+    const tSel = document.getElementById('invTableSelect');
+    tSel.innerHTML = '<option value="">-- Chọn bàn trống --</option>';
+    tables.forEach(t => tSel.innerHTML += `<option value="${t.TableID}">${t.TableName}</option>`);
+
+    const sSel = document.getElementById('invStaffSelect');
+    sSel.innerHTML = '<option value="">-- Chọn nhân viên --</option>';
+    staff.forEach(s => sSel.innerHTML += `<option value="${s.StaffID}">${s.FullName} (${s.Position})</option>`);
+
+    const mSel = document.getElementById('detailMenuSelect');
+    mSel.innerHTML = '';
+    menu.forEach(m => mSel.innerHTML += `<option value="${m.ItemID}">${m.TenMon} – ${Number(m.Gia).toLocaleString('vi-VN')}₫</option>`);
+  } catch(e) { showToast('Lỗi tải dữ liệu: '+e.message,'error'); }
+}
+
+async function createInvoice() {
+  const tableID = document.getElementById('invTableSelect').value;
+  const staffID = document.getElementById('invStaffSelect').value;
+  if (!tableID || !staffID) { showToast('Vui lòng chọn bàn và nhân viên!','error'); return; }
+  try {
+    const data = await apiFetch('/api/invoice', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ tableID:+tableID, staffID:+staffID })
+    });
+    showToast(`Tạo thành công! Mã hóa đơn: ${data.NewInvoiceID}`,'success');
+    document.getElementById('detailInvID').value = data.NewInvoiceID;
+    document.getElementById('payInvID').value    = data.NewInvoiceID;
+    loadInvoiceSelects();
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+async function addDetail() {
+  const invoiceID  = document.getElementById('detailInvID').value;
+  const menuItemID = document.getElementById('detailMenuSelect').value;
+  const quantity   = document.getElementById('detailQty').value;
+  if (!invoiceID || !menuItemID) { showToast('Vui lòng nhập đầy đủ!','error'); return; }
+  try {
+    const data = await apiFetch('/api/invoice/detail', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ invoiceID:+invoiceID, menuItemID:+menuItemID, quantity:+quantity })
+    });
+    showToast(data.message,'success');
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+async function payInvoice() {
+  const invoiceID     = document.getElementById('payInvID').value;
+  const paymentMethod = document.getElementById('payMethod').value;
+  if (!invoiceID) { showToast('Vui lòng nhập mã hóa đơn!','error'); return; }
+  try {
+    const data = await apiFetch('/api/invoice/pay', {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ invoiceID:+invoiceID, paymentMethod })
+    });
+    const d = data[0] || data;
+    document.getElementById('payResult').innerHTML = `
+      <div class="p-3 rounded" style="background:#d4edda;color:#155724;font-size:.9rem;">
+        ✅ Thanh toán thành công!<br>
+        Bàn: <strong>${d.TableName}</strong> &nbsp;|&nbsp;
+        Tổng: <strong>${Number(d.TotalAmount).toLocaleString('vi-VN')}₫</strong> &nbsp;|&nbsp;
+        Hình thức: <strong>${d.PaymentMethod}</strong>
+      </div>`;
+    showToast('Thanh toán thành công!','success');
+    loadTables();
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+/* ===== REVENUE ===== */
+async function getRevenueByDate() {
+  const date = document.getElementById('revDate').value;
+  if (!date) { showToast('Chọn ngày!','error'); return; }
+  try {
+    const data = await apiFetch(`/api/invoice/revenue/date/${date}`);
+    const el   = document.getElementById('revDateResult');
+    if (!data.length) { el.innerHTML = '<p style="color:#7A5C3E;margin:.5rem 0;">Không có dữ liệu.</p>'; return; }
+    const d = data[0];
+    el.innerHTML = `
+      <div class="p-2 rounded mt-1" style="background:#FDF6EC;font-size:.9rem;">
+        Ngày <strong>${d.NgayLap}</strong>: <strong>${d.SoHoaDon}</strong> hóa đơn – Doanh thu: <strong style="color:#6B3A1F;">${Number(d.DoanhThu).toLocaleString('vi-VN')}₫</strong>
+      </div>`;
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+async function getRevenueByMonth() {
+  const month = document.getElementById('revMonth').value;
+  const year  = document.getElementById('revYear').value;
+  if (!month || !year) { showToast('Nhập tháng và năm!','error'); return; }
+  try {
+    const data = await apiFetch(`/api/invoice/revenue/month/${month}/${year}`);
+    const el   = document.getElementById('revMonthResult');
+    if (!data.length) { el.innerHTML = '<p style="color:#7A5C3E;margin:.5rem 0;">Không có dữ liệu.</p>'; return; }
+    const d = data[0];
+    el.innerHTML = `
+      <div class="p-2 rounded mt-1" style="background:#FDF6EC;font-size:.9rem;">
+        Tháng <strong>${d.Thang}/${d.Nam}</strong>: <strong>${d.SoHoaDon}</strong> hóa đơn – Doanh thu: <strong style="color:#6B3A1F;">${Number(d.DoanhThu).toLocaleString('vi-VN')}₫</strong>
+      </div>`;
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+/* ===== RESERVATION ===== */
+async function loadReservations() {
+  try {
+    const data  = await apiFetch('/api/reservation');
+    const tbody = document.getElementById('reservationBody');
+    tbody.innerHTML = '';
+    if (!data.length) { tbody.innerHTML = '<tr><td colspan="8" class="text-center" style="color:#7A5C3E;">Không có đặt bàn</td></tr>'; return; }
+    data.forEach(r => {
+      const sc  = { Pending:'badge-reserved', Confirmed:'badge-available', Cancelled:'badge-unavailable' }[r.Status] || '';
+      const sl  = { Pending:'Chờ xác nhận', Confirmed:'Đã xác nhận', Cancelled:'Đã huỷ' }[r.Status] || r.Status;
+      const dt  = new Date(r.ReservationDate).toLocaleString('vi-VN');
+      const canAct = r.Status === 'Pending' && ['Manager','Cashier'].includes(user?.role);
+      tbody.innerHTML += `<tr>
+        <td>${r.ReservationID}</td>
+        <td>${r.FullName}</td>
+        <td>${r.Phone}</td>
+        <td>${r.TableName}</td>
+        <td style="font-size:.82rem;">${dt}</td>
+        <td>${r.GuestCount}</td>
+        <td><span class="badge rounded-pill ${sc}" style="font-size:.75rem;">${sl}</span></td>
+        <td>${canAct ? `
+          <button class="btn btn-sm btn-hd-primary me-1" onclick="updateRes(${r.ReservationID},'Confirmed')">✓</button>
+          <button class="btn btn-sm btn-hd-outline" onclick="updateRes(${r.ReservationID},'Cancelled')">✗</button>
+        ` : ''}</td>
+      </tr>`;
+    });
+  } catch(e) { showToast('Lỗi tải đặt bàn: '+e.message,'error'); }
+}
+
+async function updateRes(id, status) {
+  try {
+    await apiFetch(`/api/reservation/${id}`, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ status })
+    });
+    showToast('Cập nhật thành công!','success');
+    loadReservations();
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+/* ===== MENU (dashboard) ===== */
+async function loadDashMenu() {
+  try {
+    const data = await apiFetch('/api/menu');
+    const grid = document.getElementById('dashMenuGrid');
+    grid.innerHTML = '';
+    data.forEach(item => {
+      const av = item.TrangThai === 'Available';
+      grid.innerHTML += `
+        <div class="col-sm-6 col-lg-4">
+          <div class="card-hd p-3" style="opacity:${av?1:.6};">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="fw-bold" style="color:#3D1F0A;">${item.TenMon}</span>
+              <span class="badge rounded-pill ${av?'badge-available':'badge-unavailable'}" style="font-size:.7rem;">${av?'Còn':'Hết'}</span>
+            </div>
+            <small style="color:#7A5C3E;">${item.DanhMuc}</small>
+            <div class="fw-bold mt-1" style="color:#6B3A1F;">${Number(item.Gia).toLocaleString('vi-VN')}₫</div>
+          </div>
+        </div>`;
+    });
+  } catch(e) { showToast('Lỗi tải thực đơn','error'); }
+}
+
+/* ===== INIT ===== */
+// Default datetime for revenue
+const today = new Date().toISOString().slice(0,10);
+document.getElementById('revDate').value  = today;
+document.getElementById('revYear').value  = new Date().getFullYear();
+document.getElementById('revMonth').value = new Date().getMonth()+1;
+
+loadOverview();
+</script>
+</body>
+</html>

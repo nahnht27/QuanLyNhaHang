@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng Nhập – Happy Dinner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+<body style="background:linear-gradient(135deg,#3D1F0A 0%,#6B3A1F 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;">
+
+<!-- TOAST -->
+<div id="toast" class="toast-hd"></div>
+
+<div style="width:100%;max-width:400px;padding:1rem;">
+  <!-- Logo -->
+  <div class="text-center mb-4">
+    <div style="width:64px;height:64px;background:#C8973A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#3D1F0A;margin:0 auto 1rem;box-shadow:0 4px 16px rgba(200,151,58,.4);">HD</div>
+    <h4 style="color:#fff;font-weight:700;margin:0;">Happy <span style="color:#C8973A;">Dinner</span></h4>
+    <p style="color:rgba(255,255,255,.6);font-size:.85rem;margin-top:.25rem;">Cổng đăng nhập nội bộ</p>
+  </div>
+
+  <!-- Card -->
+  <div class="card-hd p-4">
+    <h6 class="fw-bold mb-3" style="color:#3D1F0A;">Đăng nhập nhân viên</h6>
+
+    <div class="mb-3">
+      <label class="form-label">Tên đăng nhập</label>
+      <input id="username" type="text" class="form-control" placeholder="username" />
+    </div>
+    <div class="mb-4">
+      <label class="form-label">Mật khẩu</label>
+      <input id="password" type="password" class="form-control" placeholder="••••••••"
+             onkeydown="if(event.key==='Enter') doLogin()" />
+    </div>
+
+    <button class="btn btn-hd-gold w-100 py-2 fw-semibold" onclick="doLogin()">
+      Đăng nhập
+    </button>
+
+    <div class="text-center mt-3">
+      <a href="index.html" style="font-size:.82rem;color:#7A5C3E;text-decoration:none;">← Quay về trang chủ</a>
+    </div>
+  </div>
+
+  <!-- Demo accounts hint -->
+  <div class="mt-3 p-3 rounded" style="background:rgba(255,255,255,.07);border:1px solid rgba(200,151,58,.2);">
+    <p style="color:rgba(255,255,255,.5);font-size:.75rem;margin:0 0 .4rem;text-transform:uppercase;letter-spacing:.08em;">Tài khoản demo</p>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.8;">
+      <strong style="color:#C8973A;">manager</strong> / manager123 &nbsp;(Quản lý)<br>
+      <strong style="color:#C8973A;">cashier</strong> / cashier123 &nbsp;(Thu ngân)<br>
+      <strong style="color:#C8973A;">waiter</strong> &nbsp;/ waiter123 &nbsp;&nbsp;(Phục vụ)
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showToast(msg, type='error') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = `toast-hd ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Demo accounts – thực tế sẽ gọi API /api/auth/login
+const DEMO_ACCOUNTS = {
+  manager: { password: 'manager123', role: 'Manager',  name: 'Nguyễn Quản Lý' },
+  cashier: { password: 'cashier123', role: 'Cashier',  name: 'Trần Thu Ngân'  },
+  waiter:  { password: 'waiter123',  role: 'Waiter',   name: 'Lê Phục Vụ'    }
+};
+
+function doLogin() {
+  const username = document.getElementById('username').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+
+  if (!username || !password) {
+    showToast('Vui lòng nhập đầy đủ thông tin!', 'error');
+    return;
+  }
+
+  const acc = DEMO_ACCOUNTS[username];
+  if (!acc || acc.password !== password) {
+    showToast('Tên đăng nhập hoặc mật khẩu không đúng!', 'error');
+    return;
+  }
+
+  // Lưu session đơn giản vào sessionStorage
+  sessionStorage.setItem('hd_user', JSON.stringify({ username, role: acc.role, name: acc.name }));
+  showToast(`Chào mừng, ${acc.name}!`, 'success');
+  setTimeout(() => window.location.href = 'dashboard.html', 800);
+}
+</script>
+</body>
+</html>
