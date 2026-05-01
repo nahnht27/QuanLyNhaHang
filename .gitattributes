@@ -1,4 +1,0 @@
-client/*.html linguist-detectable=false
-*.html linguist-documentation
-*.html linguist-vendored
-*.css linguist-vendored
