@@ -8,8 +8,7 @@
   <link href="css/style.css" rel="stylesheet" />
 </head>
 <body>
-
-<!-- NAVBAR -->
+\
 <nav class="navbar navbar-hd">
   <div class="container">
     <a class="navbar-brand" href="index.html">Happy <span>Dinner</span></a>
@@ -21,7 +20,6 @@
   </div>
 </nav>
 
-<!-- HEADER -->
 <div style="background:linear-gradient(135deg,#3D1F0A,#6B3A1F);padding:2.5rem 0;text-align:center;">
   <h2 style="color:#fff;font-weight:700;margin:0;">Đặt Bàn</h2>
   <div style="width:50px;height:2px;background:#C8973A;margin:.75rem auto;border-radius:2px;"></div>
@@ -145,10 +143,9 @@ async function submitReservation() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
     showToast(data.message, 'success');
-    // Reset form
     ['fullName','phone','reservationDate','guestCount','note'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('tableSelect').selectedIndex = 0;
-    loadTables(); // refresh bàn trống
+    loadTables(); 
   } catch (e) {
     showToast(e.message || 'Đặt bàn thất bại!', 'error');
   }

@@ -2,7 +2,6 @@ const express = require('express');
 const router  = express.Router();
 const { sql, getPool } = require('../config/db');
 
-// GET /api/reservation/tables – bàn trống để khách chọn 
 router.get('/tables', async (req, res) => {
     try {
         const pool = await getPool();
@@ -14,7 +13,6 @@ router.get('/tables', async (req, res) => {
     }
 });
 
-// POST /api/reservation – khách đặt bàn mới
 router.post('/', async (req, res) => {
     try {
         const { fullName, phone, reservationDate, guestCount, tableID, note } = req.body;
@@ -23,7 +21,6 @@ router.post('/', async (req, res) => {
 
         const pool = await getPool();
 
-        // Tìm hoặc tạo Customer
         let cusResult = await pool.request()
             .input('Phone', sql.VarChar(15), phone)
             .query('SELECT CustomerID FROM Customer WHERE Phone = @Phone');
@@ -39,7 +36,6 @@ router.post('/', async (req, res) => {
             customerID = newCus.recordset[0].CustomerID;
         }
 
-        // Tạo Reservation
         await pool.request()
             .input('ReservationDate', sql.DateTime,     new Date(reservationDate))
             .input('GuestCount',      sql.Int,          parseInt(guestCount))
@@ -55,7 +51,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// GET /api/reservation – danh sách đặt bàn (dành cho dashboard)
 router.get('/', async (req, res) => {
     try {
         const pool = await getPool();
@@ -74,7 +69,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// PUT /api/reservation/:id – cập nhật trạng thái (Confirmed/Cancelled)
 router.put('/:id', async (req, res) => {
     try {
         const { status } = req.body;

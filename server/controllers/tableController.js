@@ -1,6 +1,5 @@
 const { sql, getPool } = require('../config/db');
 
-// Lấy danh sách tất cả bàn
 async function getAllTables(req, res) {
     try {
         const pool = await getPool();
@@ -12,7 +11,6 @@ async function getAllTables(req, res) {
     }
 }
 
-// Lấy danh sách bàn trống
 async function getEmptyTables(req, res) {
     try {
         const pool = await getPool();

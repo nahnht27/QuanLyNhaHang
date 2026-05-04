@@ -113,7 +113,14 @@
         <i class="fa-solid fa-utensils"></i> Thực đơn
       </a>
     </div>
+    <div class="nav-item" id="nav-staff">
+  <a href="#" class="nav-link" onclick="showPanel('staff',this)">
+    <i class="fa-solid fa-user"></i> Nhân viên
+  </a>
+</div>
+
   </nav>
+
 
   <div class="sidebar-footer">
     <button class="logout-btn" onclick="logout()">
@@ -342,7 +349,37 @@
       <div class="page-title">Thực đơn</div>
       <div id="dashMenuGrid" class="row g-3"></div>
     </div>
+    <div id="panel-staff" class="content-panel">
+  <div class="page-title">Quản lý nhân viên</div>
 
+  <div class="card-hd">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      Danh sách nhân viên
+      <button class="btn btn-hd-gold btn-sm" onclick="openAddStaff()">+ Thêm</button>
+    </div>
+
+    <div class="p-3">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>SĐT</th>
+            <th>Chức vụ</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="staffBody">
+          <tr>
+            <td colspan="5" class="text-center py-3" style="color:#7A5C3E;">
+              Đang tải…
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
   </div>
 </div>
 
@@ -355,7 +392,7 @@ document.getElementById('roleBadge').textContent = user?.role || '–';
 document.getElementById('topbarUser').textContent  = user?.name || '';
 
 const roleNav = {
-  Manager: ['nav-tables','nav-invoice','nav-revenue','nav-reservation','nav-menu'],
+  Manager: ['nav-tables','nav-invoice','nav-revenue','nav-reservation','nav-menu','nav-staff'],
   Cashier: ['nav-invoice','nav-revenue','nav-reservation'],
   Waiter:  ['nav-tables','nav-invoice']
 };
@@ -391,6 +428,7 @@ function showPanel(name, el) {
   if (name === 'invoice')      loadInvoiceSelects();
   if (name === 'reservation')  loadReservations();
   if (name === 'menu')         loadDashMenu();
+  if (name === 'staff') loadStaff();
 }
 
 const API = window.location.port === '5500' ? 'http://localhost:3000' : '';
@@ -807,8 +845,130 @@ document.getElementById('revDateYear').value = new Date().getFullYear();
 document.getElementById('revMonth').value = new Date().getMonth() + 1;
 document.getElementById('revYear').value = new Date().getFullYear();
 
+async function loadStaff() {
+  try {
+    const data = await apiFetch('/api/staff');
+    const tbody = document.getElementById('staffBody');
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center" style="color:#7A5C3E;">Không có nhân viên</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.map(s => `
+      <tr>
+        <td>${s.StaffID}</td>
+        <td>${s.FullName}</td>
+        <td>${s.Phone || '–'}</td>
+        <td>${s.Position}</td>
+        <td>
+          <button class="btn btn-sm btn-hd-gold me-1" onclick="openEditStaff(${s.StaffID}, '${s.FullName}', '${s.Phone}', '${s.Position}')">✏️</button>
+          <button class="btn btn-sm btn-hd-outline" onclick="deleteStaff(${s.StaffID})">🗑️</button>
+        </td>
+      </tr>`).join('');
+  } catch(e) { showToast('Lỗi tải nhân viên: ' + e.message, 'error'); }
+}
+
+function openAddStaff() {
+  document.getElementById('staffModalTitle').textContent = 'Thêm nhân viên';
+  document.getElementById('staffEditID').value = '';
+  document.getElementById('staffName').value = '';
+  document.getElementById('staffPhone').value = '';
+  document.getElementById('staffPosition').value = 'Waiter';
+  document.getElementById('staffPassword').value = '';
+  document.getElementById('staffModal').style.display = 'flex';
+}
+
+function openEditStaff(id, name, phone, position) {
+  document.getElementById('staffModalTitle').textContent = 'Sửa nhân viên';
+  document.getElementById('staffEditID').value = id;
+  document.getElementById('staffName').value = name;
+  document.getElementById('staffPhone').value = phone;
+  document.getElementById('staffPosition').value = position;
+  document.getElementById('staffPassword').value = '';
+  document.getElementById('staffModal').style.display = 'flex';
+}
+
+function closeStaffModal() {
+  document.getElementById('staffModal').style.display = 'none';
+}
+
+async function saveStaff() {
+  const id       = document.getElementById('staffEditID').value;
+  const fullName = document.getElementById('staffName').value.trim();
+  const phone    = document.getElementById('staffPhone').value.trim();
+  const position = document.getElementById('staffPosition').value;
+  const password = document.getElementById('staffPassword').value;
+
+  if (!fullName) { showToast('Vui lòng nhập họ tên!', 'error'); return; }
+
+  const body = { fullName, phone, position };
+  if (password) body.password = password;
+
+  try {
+    if (id) {
+      await apiFetch(`/api/staff/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      showToast('Cập nhật nhân viên thành công!', 'success');
+    } else {
+      if (!password) { showToast('Vui lòng nhập mật khẩu!', 'error'); return; }
+      await apiFetch('/api/staff', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      showToast('Thêm nhân viên thành công!', 'success');
+    }
+    closeStaffModal();
+    loadStaff();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function deleteStaff(id) {
+  if (!confirm('Xác nhận xóa nhân viên này?')) return;
+  try {
+    await apiFetch(`/api/staff/${id}`, { method: 'DELETE' });
+    showToast('Đã xóa nhân viên!', 'success');
+    loadStaff();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+/* ===== END NHÂN VIÊN ===== */
+
 loadOverview();
 loadTables();
+
 </script>
+<div id="staffModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeStaffModal()">&times;</span>
+    <h2 id="staffModalTitle">Thêm nhân viên</h2>
+    <input id="staffEditID" type="hidden" />
+    <div class="mb-3">
+      <label class="form-label">Họ tên</label>
+      <input id="staffName" type="text" class="form-control" placeholder="Nguyễn Văn A" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Số điện thoại</label>
+      <input id="staffPhone" type="text" class="form-control" placeholder="09xxxxxxxx" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Chức vụ</label>
+      <select id="staffPosition" class="form-select">
+        <option value="Waiter">Waiter – Phục vụ</option>
+        <option value="Cashier">Cashier – Thu ngân</option>
+        <option value="Manager">Manager – Quản lý</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Mật khẩu</label>
+      <input id="staffPassword" type="password" class="form-control" placeholder="Để trống = không đổi khi sửa" />
+    </div>
+    <div class="d-flex gap-2 justify-content-end">
+      <button class="btn btn-hd-outline" onclick="closeStaffModal()">Hủy</button>
+      <button class="btn btn-hd-primary" onclick="saveStaff()">Lưu</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
