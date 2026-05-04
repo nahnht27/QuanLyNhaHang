@@ -44,16 +44,22 @@
 </div>
 
 <footer style="background:#3D1F0A;color:rgba(255,255,255,.55);text-align:center;padding:1.1rem;font-size:.82rem;margin-top:3rem;">
-  © 2026 Happy Dinner &nbsp;|&nbsp; Đồ án môn Cơ Sở Dữ Liệu
+  © 2026 Happy Dinner &nbsp;|&nbsp; Mang đến hương vị gia đình Việt
 </footer>
 
 <a href="login.html" style="
-  position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  position:fixed;
+  bottom:1.5rem;right:1.5rem;z-index:999;
   background:#3D1F0A;color:rgba(255,255,255,.65);
   border:1px solid rgba(200,151,58,.4);border-radius:50px;
-  padding:.45rem 1rem;font-size:.73rem;font-weight:500;
-  letter-spacing:.06em;text-transform:uppercase;
-  display:flex;align-items:center;gap:.4rem;text-decoration:none;
+  padding:.45rem 1rem;
+  font-size:.73rem;
+  font-weight:500;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;gap:.4rem;
+  text-decoration:none;
   box-shadow:0 4px 12px rgba(61,31,10,.5);"
   onmouseover="this.style.color='#fff';this.style.borderColor='#C8973A';"
   onmouseout="this.style.color='rgba(255,255,255,.65)';this.style.borderColor='rgba(200,151,58,.4)';">
@@ -76,7 +82,6 @@ async function loadMenu() {
     const data = await res.json();
     allItems   = data;
 
-    // Build category tabs
     const cats = [...new Set(data.map(i => i.DanhMuc))];
     const tabs = document.getElementById('categoryTabs');
     cats.forEach(cat => {

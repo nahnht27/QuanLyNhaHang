@@ -78,3 +78,6 @@ DENY UPDATE, DELETE ON InvoiceDetail          TO user_waiter;
 DENY SELECT, INSERT, UPDATE, DELETE ON Staff  TO user_waiter;
 DENY SELECT, INSERT, UPDATE, DELETE ON Account TO user_waiter;
 DENY INSERT, UPDATE, DELETE ON [Table]        TO user_waiter;
+
+
+
