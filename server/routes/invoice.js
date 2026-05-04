@@ -130,10 +130,11 @@ router.get('/table/:tableID', async (req, res) => {
     }
 });
 
-// GET /api/invoice/detail/:invoiceID – Lấy chi tiết món ăn trong hóa đơn
+// GET /api/invoice/detail/:invoiceID
 router.get('/detail/:invoiceID', async (req, res) => {
     try {
         const pool = await getPool();
+
         const result = await pool.request()
             .input('InvoiceID', sql.Int, req.params.invoiceID)
             .query(`
@@ -150,6 +151,45 @@ router.get('/detail/:invoiceID', async (req, res) => {
             `);
 
         res.json(result.recordset);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// PUT /api/invoice/table/:id/status – Cập nhật trạng thái bàn
+router.put('/table/:id/status', async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+        return res.status(400).json({ error: 'Thiếu trạng thái bàn!' });
+    }
+
+    try {
+        const pool = await getPool();
+
+        // kiểm tra bàn tồn tại
+        const check = await pool.request()
+            .input('TableID', sql.Int, id)
+            .query('SELECT * FROM [Table] WHERE TableID = @TableID');
+
+        if (check.recordset.length === 0) {
+            return res.status(404).json({ error: 'Không tìm thấy bàn!' });
+        }
+
+        // update
+        await pool.request()
+            .input('Status', sql.NVarChar, status)
+            .input('TableID', sql.Int, id)
+            .query('UPDATE [Table] SET Status = @Status WHERE TableID = @TableID');
+
+        res.json({
+            message: 'Cập nhật trạng thái bàn thành công!',
+            tableID: id,
+            status
+        });
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

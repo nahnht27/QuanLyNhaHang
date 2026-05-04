@@ -73,6 +73,19 @@
   </style>
 </head>
 <body>
+  <div id="tableActionModal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+      <span class="close" onclick="closeTableActionModal()">&times;</span>
+      <h4 class="mb-3" style="color:#3D1F0A;">Xử lý đặt bàn</h4>
+      <p>Chọn thao tác cho bàn: <strong id="modalActionTableName"></strong></p>
+      
+      <div class="d-flex flex-column gap-2 mt-3">
+        <button class="btn btn-hd-primary" onclick="confirmTableAction('Occupied')">✓ Nhận bàn (Có khách)</button>
+        <button class="btn btn-hd-gold" onclick="openAndCreateInvoice()">➕ Nhận bàn & Lập hóa đơn</button>
+        <button class="btn btn-secondary" onclick="confirmTableAction('Empty')">✗ Hủy đặt bàn (Trống)</button>
+      </div>
+    </div>
+  </div>
 
 <div id="toast" class="toast-hd"></div>
 
@@ -431,10 +444,18 @@ function showPanel(name, el) {
   if (name === 'staff') loadStaff();
 }
 
-const API = window.location.port === '5500' ? 'http://localhost:3000' : '';
+const API = 'http://localhost:3001';
 
-async function apiFetch(url, opts={}) {
-  const res  = await fetch(API + url, opts);
+async function apiFetch(url, opts = {}) {
+  const res = await fetch(API + url, opts);
+  
+  // Kiểm tra nếu response không phải là JSON
+  const contentType = res.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    const text = await res.text();
+    throw new Error(`Lỗi hệ thống hoặc đường dẫn không đúng. Server trả về: ${text.substring(0, 50)}`);
+  }
+
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Lỗi server');
   return data;
@@ -468,6 +489,8 @@ async function loadOverview() {
   } catch(e) { console.error(e); }
 }
 
+let currentSelectedTableID = null;
+
 async function loadTables() {
   try {
     const tables = await apiFetch('/api/table');
@@ -491,13 +514,16 @@ async function loadTables() {
         'Reserved': 'Đã đặt' 
       }[t.Status] || t.Status;
 
-      const onclickAction = t.Status === 'Occupied' 
-        ? `onclick="loadInvoiceDetails(${t.TableID})"` 
-        : '';
+      let onclickAction = '';
+      if (t.Status === 'Occupied') {
+        onclickAction = `onclick="loadInvoiceDetails(${t.TableID})"`;
+      } else if (t.Status === 'Reserved') {
+        onclickAction = `onclick="openTableActionModal(${t.TableID}, '${t.TableName}')"`;
+      }
 
       htmlContent += `
         <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="card-hd p-3 text-center h-100 d-flex flex-column justify-content-between" ${onclickAction} style="cursor: ${t.Status === 'Occupied' ? 'pointer' : 'default'};">
+          <div class="card-hd p-3 text-center h-100 d-flex flex-column justify-content-between" ${onclickAction} style="cursor: ${t.Status !== 'Empty' ? 'pointer' : 'default'};">
             <div>
               <h5 class="fw-bold mb-1" style="color:#3D1F0A;">${t.TableName}</h5>
               <p style="font-size:.82rem;color:#7A5C3E;margin:.2rem 0;">Sức chứa: ${t.Capacity} khách</p>
@@ -512,6 +538,47 @@ async function loadTables() {
   } catch(e) { 
     showToast('Lỗi tải bàn: ' + e.message, 'error'); 
   }
+}
+
+function openTableActionModal(tableID, tableName) {
+  currentSelectedTableID = tableID;
+  document.getElementById('modalActionTableName').textContent = tableName;
+  document.getElementById('tableActionModal').style.display = 'flex';
+}
+
+function closeTableActionModal() {
+  document.getElementById('tableActionModal').style.display = 'none';
+  currentSelectedTableID = null;
+}
+
+async function confirmTableAction(status) {
+  if (!tableID) return;
+  try {
+    await apiFetch(`/api/table/${tableID}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'Occupied' })
+    });
+    showToast('Cập nhật trạng thái bàn thành công!', 'success');
+    closeTableActionModal();
+    loadTables();
+  } catch (e) {
+    showToast('Lỗi thao tác: ' + e.message, 'error');
+  }
+}
+
+function openAndCreateInvoice() {
+  closeTableActionModal();
+  confirmTableAction('Occupied');
+  showPanel('invoice', document.querySelector('.sidebar-nav .nav-link'));
+  
+  //gán bàn sang ô tạo hóa đơn
+  setTimeout(() => {
+    const tableSelect = document.getElementById('invTableSelect');
+    if (tableSelect && currentSelectedTableID) {
+      tableSelect.value = currentSelectedTableID;
+    }
+  }, 300);
 }
 
 async function loadInvoiceSelects() {
@@ -933,7 +1000,6 @@ async function deleteStaff(id) {
     loadStaff();
   } catch(e) { showToast(e.message, 'error'); }
 }
-/* ===== END NHÂN VIÊN ===== */
 
 loadOverview();
 loadTables();
