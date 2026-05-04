@@ -860,8 +860,8 @@ async function loadStaff() {
         <td>${s.Phone || '–'}</td>
         <td>${s.Position}</td>
         <td>
-          <button class="btn btn-sm btn-hd-gold me-1" onclick="openEditStaff(${s.StaffID}, '${s.FullName}', '${s.Phone}', '${s.Position}')">✏️</button>
-          <button class="btn btn-sm btn-hd-outline" onclick="deleteStaff(${s.StaffID})">🗑️</button>
+          <button class="btn btn-sm btn-hd-gold me-1" onclick="openEditStaff(${s.StaffID}, '${s.FullName}', '${s.Phone}', '${s.Position}')"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button class="btn btn-sm btn-hd-outline" onclick="deleteStaff(${s.StaffID})"><i class="fa-solid fa-trash"></i></button>
         </td>
       </tr>`).join('');
   } catch(e) { showToast('Lỗi tải nhân viên: ' + e.message, 'error'); }
